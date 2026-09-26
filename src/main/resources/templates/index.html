@@ -1,0 +1,2697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analyzer & Job Recommendation System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        .navbar {
+            background: #ffffff;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+
+        .nav-text {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            color: #666;
+            font-size: 17px;
+        }
+
+        .job-role-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .job-role-card h3 {
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        #jobRoleSelect {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+        }
+
+        .upload-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .upload-icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .upload-card h2 {
+            margin-bottom: 10px;
+        }
+
+        .upload-card p {
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            margin: 15px 0 25px;
+        }
+
+        button {
+            background: #222;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #444;
+        }
+
+        .analyze-btn {
+            padding: 13px 30px;
+            font-size: 16px;
+        }
+
+        #message {
+            margin-top: 18px;
+            font-weight: bold;
+        }
+
+        #result {
+            display: none;
+            margin-top: 35px;
+        }
+
+        .section-title {
+            margin-bottom: 15px;
+            font-size: 25px;
+        }
+
+        .score-card {
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            margin-bottom: 20px;
+        }
+
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin: 25px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: conic-gradient(
+                #222 0deg,
+                #222 0deg,
+                #e8e8e8 0deg,
+                #e8e8e8 360deg
+            );
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: "";
+            width: 135px;
+            height: 135px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .score {
+            position: relative;
+            z-index: 1;
+            font-size: 38px;
+            font-weight: bold;
+        }
+
+        .score-text {
+            color: #777;
+            font-size: 15px;
+        }
+
+        .job-match-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            margin-bottom: 20px;
+        }
+
+        .job-match-card h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .job-match-role {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .job-match-score {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .job-match-bar {
+            width: 100%;
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .job-match-fill {
+            height: 100%;
+            width: 0%;
+            background: #222;
+            border-radius: 10px;
+            transition: width 0.8s ease;
+        }
+
+        .job-missing-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .breakdown-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            margin-bottom: 20px;
+        }
+
+        .breakdown-card h3 {
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+
+        .breakdown-item {
+            margin-bottom: 22px;
+        }
+
+        .breakdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .breakdown-name {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .breakdown-score {
+            font-size: 14px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #222;
+            border-radius: 10px;
+            transition: width 0.8s ease;
+        }
+
+        .breakdown-total {
+            border-top: 1px solid #eee;
+            margin-top: 25px;
+            padding-top: 18px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 9px;
+            line-height: 1.4;
+        }
+
+        .history-section {
+            margin-top: 50px;
+        }
+
+        .history-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            overflow-x: auto;
+        }
+
+    .history-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    min-width: 1100px;
+}
+
+.history-table th,
+.history-table td {
+    padding: 13px 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.history-table th {
+    background: #f7f8fa;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.history-table td {
+    font-size: 14px;
+}
+
+/* Column widths */
+
+
+.history-table th:nth-child(1),
+.history-table td:nth-child(1) {
+    width: 7%;
+}
+
+.history-table th:nth-child(2),
+.history-table td:nth-child(2) {
+    width: 8%;
+}
+
+.history-table th:nth-child(3),
+.history-table td:nth-child(3) {
+    width: 22%;
+}
+
+.history-table th:nth-child(4),
+.history-table td:nth-child(4) {
+    width: 14%;
+}
+
+.history-table th:nth-child(5),
+.history-table td:nth-child(5) {
+    width: 20%;
+}
+
+.history-table th:nth-child(6),
+.history-table td:nth-child(6) {
+    width: 10%;
+}
+
+.history-table th:nth-child(7),
+.history-table td:nth-child(7) {
+    width: 19%;
+}
+
+
+/* Keep action buttons together */
+
+.history-table td:last-child {
+    white-space: nowrap;
+}
+
+.history-table .view-btn,
+.history-table .delete-btn {
+    padding: 9px 12px;
+    font-size: 13px;
+}
+        .score-badge {
+            font-weight: bold;
+        }
+
+        .view-btn {
+            margin-right: 6px;
+        }
+
+        .delete-btn {
+            background: #b42318;
+        }
+
+        .delete-btn:hover {
+            background: #8e1b13;
+        }
+
+        .no-history {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 16px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-btn:hover {
+            color: #222;
+        }
+
+        .detail-section {
+            margin-top: 20px;
+        }
+
+        .detail-section h3 {
+            margin-bottom: 10px;
+        }
+
+        .detail-section ul {
+            margin-bottom: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            color: #777;
+            font-size: 14px;
+        }
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #f4f6fb;
+    color: #1f2937;
+    line-height: 1.6;
+}
+
+.navbar {
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: #111827;
+}
+
+.nav-text {
+    color: #6b7280;
+}
+
+.container {
+    max-width: 1150px;
+}
+
+.hero {
+    padding: 20px 0 10px;
+}
+
+.hero h1 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    color: #111827;
+}
+
+.hero p {
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.7;
+    color: #6b7280;
+}
+
+.job-role-card,
+.upload-card,
+.score-card,
+.job-match-card,
+.breakdown-card,
+.card,
+.history-card {
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+.job-role-card:hover,
+.upload-card:hover,
+.score-card:hover,
+.job-match-card:hover,
+.breakdown-card:hover,
+.card:hover,
+.history-card:hover {
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.09);
+}
+
+.job-role-card h3 {
+    color: #111827;
+}
+
+#jobRoleSelect {
+    border: 1px solid #d1d5db;
+    color: #374151;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease,
+                box-shadow 0.2s ease;
+}
+
+#jobRoleSelect:focus {
+    border-color: #374151;
+    box-shadow: 0 0 0 3px rgba(55, 65, 81, 0.12);
+}
+
+.upload-card {
+    padding: 45px 40px;
+}
+
+.upload-icon {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto 18px;
+    border-radius: 18px;
+    background: #f1f3f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+}
+
+.upload-card h2 {
+    color: #111827;
+    font-size: 24px;
+}
+
+.upload-card p {
+    color: #6b7280;
+}
+
+.file-input {
+    max-width: 100%;
+    padding: 10px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+button {
+    font-weight: 600;
+    border-radius: 9px;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+.analyze-btn {
+    min-width: 180px;
+    padding: 14px 28px;
+    font-weight: 600;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+}
+
+.analyze-btn:hover {
+    background: #111827;
+    box-shadow: 0 7px 16px rgba(0, 0, 0, 0.16);
+}
+
+#message {
+    min-height: 22px;
+    font-size: 14px;
+    color: #4b5563;
+}
+
+.section-title {
+    color: #111827;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.score-card {
+    padding: 40px 35px;
+}
+
+.score-card h3 {
+    font-size: 21px;
+    color: #111827;
+}
+
+.score-circle {
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.08),
+        inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+.score {
+    color: #111827;
+}
+
+.score-text {
+    color: #6b7280;
+}
+
+.job-match-card h3 {
+    color: #111827;
+}
+
+.job-match-role {
+    color: #6b7280;
+}
+
+.job-match-role strong {
+    color: #111827;
+}
+
+.job-match-score {
+    color: #111827;
+}
+
+.job-match-bar {
+    height: 12px;
+    background: #eef0f3;
+}
+
+.job-match-fill {
+    background: #111827;
+}
+
+.breakdown-card h3 {
+    color: #111827;
+}
+
+.progress-bar {
+    background: #eef0f3;
+}
+
+.progress-fill {
+    background: #111827;
+}
+
+.card h3 {
+    color: #111827;
+}
+
+.card ul {
+    color: #4b5563;
+}
+
+.card li {
+    line-height: 1.55;
+}
+
+.history-section {
+    margin-top: 60px;
+}
+
+.history-card {
+    padding: 20px;
+}
+
+.history-table th {
+    background: #f8fafc;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.history-table td {
+    color: #4b5563;
+}
+
+.history-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.history-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.score-badge {
+    color: #111827;
+}
+
+.view-btn {
+    background: #111827;
+}
+
+.view-btn:hover {
+    background: #374151;
+}
+
+.delete-btn {
+    background: #b42318;
+}
+
+.delete-btn:hover {
+    background: #991b1b;
+}
+
+.modal {
+    backdrop-filter: blur(4px);
+    background: rgba(15, 23, 42, 0.55);
+}
+
+.modal-content {
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+.close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.close-btn:hover {
+    color: #111827;
+    background: #f3f4f6;
+}
+
+footer {
+    border-top: 1px solid #e5e7eb;
+    background: #ffffff;
+}
+
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.skill-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: #f1f3f5;
+    border: 1px solid #e5e7eb;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.skill-tag:hover {
+    background: #e5e7eb;
+}
+
+.empty-tag {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: #f8fafc;
+    border: 1px dashed #d1d5db;
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                padding: 15px 5%;
+            }
+
+            .nav-text {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .upload-card {
+                padding: 25px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                padding: 22px;
+            }
+
+            .score-circle {
+                width: 160px;
+                height: 160px;
+            }
+
+            .score-circle::before {
+                width: 120px;
+                height: 120px;
+            }
+
+            .breakdown-card {
+                padding: 22px;
+            }
+
+            .job-match-card {
+                padding: 22px;
+            }
+        }
+           .info-list {
+    margin-top: 14px;
+    padding-left: 20px;
+    color: #4b5563;
+}
+
+.info-list li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.info-list li::marker {
+    color: #6b7280;
+}
+
+        /* Resume History Table Polish */
+
+.history-card {
+    overflow-x: auto;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 850px;
+}
+
+.history-table th,
+.history-table td {
+    padding: 14px 16px;
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.history-table th {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.history-table td {
+    font-size: 14px;
+    border-bottom: 1px solid #eef0f3;
+}
+
+.history-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.history-table th:first-child,
+.history-table td:first-child {
+    padding-left: 12px;
+}
+
+.history-table th:last-child,
+.history-table td:last-child {
+    padding-right: 12px;
+}
+
+.history-table .view-btn,
+.history-table .delete-btn {
+    padding: 8px 12px;
+    margin-right: 6px;
+    font-size: 13px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+}
+
+.history-card {
+    overflow-x: auto;
+}
+
+.history-table {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.history-table th {
+    padding: 15px 16px;
+    background: #f8fafc;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 700;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.history-table td {
+    padding: 15px 16px;
+    color: #4b5563;
+    font-size: 14px;
+    border-bottom: 1px solid #eef0f3;
+    vertical-align: middle;
+}
+
+.history-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.history-table td:first-child,
+.history-table th:first-child {
+    padding-left: 20px;
+}
+
+.history-table td:last-child,
+.history-table th:last-child {
+    padding-right: 20px;
+}
+
+.history-table .view-btn,
+.history-table .delete-btn {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 6px 0 0;
+    font-size: 13px;
+    line-height: 1.2;
+    border-radius: 7px;
+    white-space: nowrap;
+}
+
+.history-table .delete-btn {
+    margin-right: 0;
+}
+
+
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.skill-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 13px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    border: 1px solid #e5e7eb;
+    background: #f8fafc;
+    color: #374151;
+}
+
+.tag-container .skill-tag:hover {
+    transform: translateY(-1px);
+}
+
+.empty-tag {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #f9fafb;
+    color: #6b7280;
+    font-size: 13px;
+    border: 1px dashed #d1d5db;
+}
+
+.info-list {
+    margin-top: 12px;
+}
+
+.info-list li {
+    margin-bottom: 9px;
+    line-height: 1.5;
+}
+
+.info-list li:last-child {
+    margin-bottom: 0;
+}
+        /* Upload Section - UI Polish */
+
+.upload-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.upload-card input[type="file"] {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border: 2px dashed #d1d5db;
+    border-radius: 10px;
+    background: #f9fafb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.upload-card input[type="file"]:hover {
+    border-color: #9ca3af;
+    background: #f3f4f6;
+}
+
+.upload-card input[type="file"]::file-selector-button {
+    margin-right: 12px;
+    padding: 9px 14px;
+    border: none;
+    border-radius: 7px;
+    background: #111827;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.upload-card input[type="file"]::file-selector-button:hover {
+    background: #374151;
+}
+
+.upload-card .analyze-btn {
+    width: 100%;
+    margin-top: 18px;
+    padding: 13px 18px;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 700;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.upload-card .analyze-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+}
+        /* Upload Section - Final UI Polish */
+
+.upload-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.upload-icon {
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+
+.upload-card p {
+    color: #6b7280;
+    margin-bottom: 16px;
+}
+
+.file-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px dashed #d1d5db;
+    border-radius: 10px;
+    background: #f9fafb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.file-input:hover {
+    border-color: #9ca3af;
+    background: #f3f4f6;
+}
+
+.file-input::file-selector-button {
+    margin-right: 12px;
+    padding: 9px 14px;
+    border: none;
+    border-radius: 7px;
+    background: #111827;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.file-input::file-selector-button:hover {
+    background: #374151;
+}
+
+.analyze-btn {
+    width: 100%;
+    margin-top: 12px;
+    padding: 13px 18px;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 700;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.analyze-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+}
+
+#message {
+    margin-top: 12px;
+}
+        /* View Details Modal - UI Polish */
+
+.modal {
+    padding: 20px;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    width: 90%;
+    max-width: 650px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 30px;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+    position: relative;
+}
+
+.modal-content h2 {
+    margin: 0 40px 24px 0;
+    color: #111827;
+    font-size: 22px;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.close-btn {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 24px;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+.detail-section {
+    padding: 16px 0;
+    border-top: 1px solid #eef0f3;
+}
+
+.detail-section:first-of-type {
+    border-top: none;
+}
+
+.detail-section h3 {
+    margin: 0 0 8px;
+    color: #374151;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.detail-section p {
+    margin: 0;
+    color: #111827;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.detail-section ul {
+    margin: 8px 0 0;
+    padding-left: 20px;
+    color: #4b5563;
+}
+
+.detail-section li {
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.detail-section li:last-child {
+    margin-bottom: 0;
+}
+
+@media (max-width: 600px) {
+
+    .modal {
+        padding: 12px;
+    }
+
+    .modal-content {
+        width: 100%;
+        padding: 22px;
+        max-height: 90vh;
+    }
+
+    .modal-content h2 {
+        font-size: 19px;
+    }
+
+    .detail-section {
+        padding: 13px 0;
+    }
+}
+        /* Final Mobile Responsive Polish */
+
+@media (max-width: 700px) {
+
+    .container {
+        width: 92%;
+        margin: 0 auto;
+    }
+
+    .hero {
+        padding: 35px 0 25px;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+        line-height: 1.25;
+    }
+
+    .hero p {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .upload-card {
+        padding: 22px;
+    }
+
+    .file-input {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .file-input::file-selector-button {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .analyze-btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+  .score-card,
+.job-match-card,
+.breakdown-card {
+    padding: 20px;
+}
+
+    .score-circle {
+        width: 145px;
+        height: 145px;
+    }
+
+    .history-card {
+        overflow-x: auto;
+    }
+
+    .history-table {
+        min-width: 850px;
+    }
+
+    .history-table th,
+    .history-table td {
+        padding: 12px;
+    }
+
+    .modal {
+        padding: 10px;
+    }
+
+    .modal-content {
+        width: 100%;
+        max-width: 100%;
+        max-height: 90vh;
+        padding: 20px;
+        margin: 0 auto;
+    }
+
+    .modal-content h2 {
+        font-size: 19px;
+    }
+
+    .detail-section h3 {
+        font-size: 14px;
+    }
+
+    .detail-section p,
+    .detail-section li {
+        font-size: 14px;
+    }
+}
+
+/* ===== Final Hero & Upload Section Polish ===== */
+
+.hero {
+    padding: 35px 0 28px;
+}
+
+.hero h1 {
+    font-size: 42px;
+    line-height: 1.2;
+    margin-bottom: 14px;
+}
+
+.hero p {
+    font-size: 16px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Target Job Role Card */
+.job-role-card {
+    padding: 28px 32px;
+    margin-bottom: 18px;
+}
+
+.job-role-card h3 {
+    margin-bottom: 14px;
+    font-size: 19px;
+}
+
+#jobRoleSelect {
+    max-width: 520px;
+    padding: 13px 15px;
+    border-radius: 10px;
+    background: #fff;
+}
+
+/* Upload Resume Card */
+.upload-card {
+    padding: 34px 32px;
+}
+
+.upload-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 14px;
+    border-radius: 16px;
+    font-size: 32px;
+}
+
+.upload-card h2 {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+.upload-card p {
+    margin-bottom: 14px;
+}
+
+.file-input {
+    margin: 8px 0 0;
+}
+
+.analyze-btn {
+    margin-top: 14px;
+}
+
+#message {
+    min-height: 22px;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+    .hero {
+        padding: 28px 0 22px;
+    }
+
+    .hero h1 {
+        font-size: 30px;
+    }
+
+    .job-role-card {
+        padding: 24px 20px;
+    }
+
+    .upload-card {
+        padding: 24px 20px;
+    }
+}
+
+        .file-input-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 720px;
+    min-height: 78px;
+    margin: 18px auto 0;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 2px dashed #d1d5db;
+    border-radius: 12px;
+    background: #fafbfc;
+}
+
+.file-input {
+    display: none;
+}
+
+.choose-file-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 18px;
+    background: #111827;
+    color: white;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.choose-file-btn:hover {
+    background: #1f2937;
+}
+
+.file-name {
+    font-size: 15px;
+    color: #374151;
+}
+        /* ===== Analysis Result Final Polish ===== */
+
+#result {
+    margin-top: 35px;
+}
+
+#result .section-title {
+    margin-bottom: 24px;
+}
+
+/* ATS Score */
+.score-card {
+    padding: 32px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+}
+
+.score-card h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    color: #111827;
+}
+
+.score-text {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+/* Job Match */
+.job-match-card {
+    margin-top: 20px;
+    padding: 28px;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+}
+
+.job-match-card h3 {
+    margin-bottom: 16px;
+    font-size: 20px;
+}
+
+.job-match-score {
+    margin: 18px 0 12px;
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.job-match-bar {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 999px;
+}
+
+/* ATS Breakdown */
+.breakdown-card {
+    margin-top: 20px;
+    padding: 28px;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+}
+
+.breakdown-card h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.breakdown-total {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+    font-weight: 700;
+}
+
+/* Result Cards */
+#result .card {
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+}
+
+#result .card h3 {
+    margin-bottom: 6px;
+    font-size: 18px;
+}
+
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        Resume Analyzer & Job Recommendation System
+    </div>
+
+    <div class="nav-text">
+        ATS Resume Analysis System
+    </div>
+
+</nav>
+
+<div class="container">
+
+    <div class="hero">
+
+        <h1>Analyze Your Resume</h1>
+
+        <p>
+            Upload your resume and get ATS score, skills,
+            job recommendations and improvement suggestions.
+        </p>
+
+    </div>
+
+    <div class="job-role-card">
+
+        <h3>Select Target Job Role</h3>
+
+        <select id="jobRoleSelect">
+            <option value="">Select Job Role</option>
+        </select>
+
+    </div>
+
+    <div class="upload-card">
+
+        <div class="upload-icon">
+            📄
+        </div>
+
+        <h2>Upload Your Resume</h2>
+
+        <p>
+            Select your resume in PDF format
+        </p>
+
+        <div class="file-input-wrapper">
+
+            <input
+                    type="file"
+                    id="fileInput"
+                    class="file-input"
+                    accept=".pdf"
+            >
+
+            <label for="fileInput" class="choose-file-btn">
+                Choose file
+            </label>
+
+            <span id="fileName" class="file-name">
+        No file chosen
+    </span>
+
+        </div>
+
+        <br>
+
+        <button
+                class="analyze-btn"
+                onclick="uploadResume()">
+            Analyze Resume
+        </button>
+
+        <div id="message"></div>
+
+    </div>
+
+    <div id="result">
+
+        <h2 class="section-title">
+            Resume Analysis Result
+        </h2>
+
+        <div class="score-card">
+
+            <h3>ATS Score</h3>
+
+            <div class="score-circle" id="scoreCircle">
+
+                <div class="score" id="atsScore">
+                    0
+                </div>
+
+            </div>
+
+            <div class="score-text">
+                Resume compatibility score
+            </div>
+
+        </div>
+
+        <div class="job-match-card">
+
+            <h3>🎯 Job Match Analysis</h3>
+
+            <div class="job-match-role">
+                Target Role:
+                <strong id="jobMatchRole">-</strong>
+            </div>
+
+            <div class="job-match-score">
+                <span id="jobMatchScore">0</span>%
+            </div>
+
+            <div class="job-match-bar">
+
+                <div
+                        class="job-match-fill"
+                        id="jobMatchFill">
+                </div>
+
+            </div>
+
+            <div class="job-missing-title">
+                Missing Job Skills
+            </div>
+
+            <ul id="jobMissingSkills"></ul>
+
+        </div>
+
+        <div class="breakdown-card">
+
+            <h3>ATS Score Breakdown</h3>
+
+            <div id="scoreBreakdown"></div>
+
+            <div class="breakdown-total">
+                <span>Total ATS Score</span>
+                <span id="breakdownTotal">0 / 100</span>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="card">
+                <h3>🛠 Detected Skills</h3>
+                <div id="skills" class="tag-container"></div>
+            </div>
+
+            <div class="card">
+                <h3>💼 Recommended Jobs</h3>
+                <div id="jobs" class="tag-container"></div>
+            </div>
+
+            <div class="card">
+                <h3>📚 Missing Skills</h3>
+                <div id="missingSkills" class="tag-container"></div>
+            </div>
+
+            <div class="card">
+                <h3>💪 Strengths</h3>
+                <div id="strengths" class="info-list"></div>
+            </div>
+
+            <div class="card">
+                <h3>💡 Suggestions</h3>
+                <div id="suggestions" class="info-list"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="history-section">
+
+        <h2 class="section-title">
+            📋 Resume History
+        </h2>
+
+        <div class="history-card">
+
+            <table class="history-table">
+
+                <thead>
+
+                <tr>
+                    <th>S.No.</th>
+                    <th>ID</th>
+                    <th>File Name</th>
+                    <th>ATS Score</th>
+                    <th>Target Role</th>
+                    <th>Match Score</th>
+                    <th>Actions</th>
+                </tr>
+
+                </thead>
+
+                <tbody id="historyBody">
+                </tbody>
+
+            </table>
+
+            <div
+                    id="noHistory"
+                    class="no-history"
+                    style="display:none;">
+                No resume history available.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="detailsModal" class="modal">
+
+    <div class="modal-content">
+
+        <span
+                class="close-btn"
+                onclick="closeModal()">
+            &times;
+        </span>
+
+        <h2 id="detailFileName">
+            Resume Details
+        </h2>
+
+        <div class="detail-section">
+
+            <h3>ATS Score</h3>
+
+            <p id="detailScore"></p>
+
+        </div>
+
+        <div class="detail-section">
+
+            <h3>🎯 Target Job Role</h3>
+
+            <p id="detailJobRole"></p>
+
+        </div>
+
+        <div class="detail-section">
+
+            <h3>📊 Job Match Score</h3>
+
+            <p id="detailJobMatchScore"></p>
+
+        </div>
+
+        <div class="detail-section">
+
+            <h3>🛠 Skills</h3>
+
+            <ul id="detailSkills"></ul>
+
+        </div>
+
+        <div class="detail-section">
+
+            <h3>💼 Recommended Jobs</h3>
+
+            <ul id="detailJobs"></ul>
+
+        </div>
+
+        <div class="detail-section">
+
+            <h3>📚 Missing Skills</h3>
+
+            <ul id="detailMissingSkills"></ul>
+
+        </div>
+
+        <div class="detail-section">
+
+            <h3>💪 Strengths</h3>
+
+            <ul id="detailStrengths"></ul>
+
+        </div>
+
+        <div class="detail-section">
+
+            <h3>💡 Suggestions</h3>
+
+            <ul id="detailSuggestions"></ul>
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    Resume Analyzer & Job Recommendation System
+</footer>
+
+<script>
+
+    async function loadJobRoles() {
+
+        const select =
+            document.getElementById(
+                "jobRoleSelect"
+            );
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/job/roles"
+                );
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load job roles"
+                );
+
+            }
+
+            const roles =
+                await response.json();
+
+            roles.forEach(role => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    role;
+
+                option.innerText =
+                    role;
+
+                select.appendChild(option);
+
+            });
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    }
+
+    async function uploadResume() {
+
+        const fileInput =
+            document.getElementById("fileInput");
+
+        const jobRoleSelect =
+            document.getElementById(
+                "jobRoleSelect"
+            );
+
+        const message =
+            document.getElementById("message");
+
+        const result =
+            document.getElementById("result");
+
+        const selectedRole =
+            jobRoleSelect.value;
+
+        if (!selectedRole) {
+
+            message.innerText =
+                "Please select a target job role.";
+
+            return;
+        }
+
+        if (fileInput.files.length === 0) {
+
+            message.innerText =
+                "Please select a PDF resume.";
+
+            return;
+        }
+
+        const file =
+            fileInput.files[0];
+
+        if (!file.name.toLowerCase().endsWith(".pdf")) {
+
+            message.innerText =
+                "Please select a PDF file.";
+
+            return;
+        }
+
+        const formData =
+            new FormData();
+
+        formData.append("file", file);
+        formData.append("jobRole", selectedRole);
+
+        message.innerText =
+            "Analyzing resume...";
+
+        result.style.display =
+            "none";
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/resume/upload",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            if (!response.ok) {
+
+                message.innerText =
+                    data.message ||
+                    "Resume analysis failed.";
+
+                return;
+            }
+
+            message.innerText =
+                "Resume analyzed successfully!";
+
+            result.style.display =
+                "block";
+
+            const atsScore =
+                Number(data.atsScore);
+
+            document.getElementById(
+                "atsScore"
+            ).innerText =
+                atsScore;
+
+            const scoreCircle =
+                document.getElementById(
+                    "scoreCircle"
+                );
+
+            const scoreDegree =
+                (atsScore / 100) * 360;
+
+            scoreCircle.style.background =
+                `conic-gradient(
+                    #222 0deg,
+                    #222 ${scoreDegree}deg,
+                    #e8e8e8 ${scoreDegree}deg,
+                    #e8e8e8 360deg
+                )`;
+
+            showScoreBreakdown(
+                data.scoreBreakdown,
+                atsScore
+            );
+
+            showList(
+                "skills",
+                data.skills
+            );
+
+            showList(
+                "jobs",
+                data.recommendedJobs
+            );
+
+            showList(
+                "missingSkills",
+                data.missingSkills
+            );
+
+            showList(
+                "strengths",
+                data.strengths
+            );
+
+            showList(
+                "suggestions",
+                data.suggestions
+            );
+
+            const resumeSkills =
+                data.skills || [];
+
+            const skillsString =
+                resumeSkills.join(",");
+
+            const matchResponse =
+                await fetch(
+                    "/api/job/match?role="
+                    + encodeURIComponent(selectedRole)
+                    + "&skills="
+                    + encodeURIComponent(skillsString)
+                    + "&resumeId="
+                    + encodeURIComponent(data.id)
+                );
+
+            const matchData =
+                await matchResponse.json();
+
+            if (matchResponse.ok) {
+
+                document.getElementById(
+                    "jobMatchRole"
+                ).innerText =
+                    matchData.jobRole;
+
+                document.getElementById(
+                    "jobMatchScore"
+                ).innerText =
+                    matchData.matchScore;
+
+                document.getElementById(
+                    "jobMatchFill"
+                ).style.width =
+                    matchData.matchScore + "%";
+
+                showList(
+                    "jobMissingSkills",
+                    matchData.missingSkills
+                );
+
+            }
+
+            loadResumeHistory();
+
+            result.scrollIntoView({
+                behavior: "smooth"
+            });
+
+        } catch (error) {
+
+            console.error(error);
+
+            message.innerText =
+                "Unable to connect to server.";
+
+        }
+
+    }
+
+    function showScoreBreakdown(
+        breakdown,
+        totalScore
+    ) {
+
+        const container =
+            document.getElementById(
+                "scoreBreakdown"
+            );
+
+        container.innerHTML =
+            "";
+
+        if (!breakdown) {
+
+            container.innerHTML =
+                "<p>Score breakdown not available.</p>";
+
+            document.getElementById(
+                "breakdownTotal"
+            ).innerText =
+                totalScore + " / 100";
+
+            return;
+        }
+
+        Object.entries(breakdown).forEach(
+            ([name, score]) => {
+
+                let maximum = 0;
+
+                if (name === "Technical Skills") {
+                    maximum = 40;
+                } else if (name === "Resume Sections") {
+                    maximum = 20;
+                } else if (name === "Projects") {
+                    maximum = 15;
+                } else if (name === "Education") {
+                    maximum = 10;
+                } else if (name === "Contact Information") {
+                    maximum = 5;
+                } else if (name === "Achievements") {
+                    maximum = 10;
+                }
+
+                const percentage =
+                    maximum > 0
+                        ? (Number(score) / maximum) * 100
+                        : 0;
+
+                const item =
+                    document.createElement("div");
+
+                item.className =
+                    "breakdown-item";
+
+                item.innerHTML = `
+
+                    <div class="breakdown-header">
+
+                        <span class="breakdown-name">
+                            ${escapeHtml(name)}
+                        </span>
+
+                        <span class="breakdown-score">
+                            ${Number(score)} / ${maximum}
+                        </span>
+
+                    </div>
+
+                    <div class="progress-bar">
+
+                        <div
+                            class="progress-fill"
+                            style="width: ${percentage}%;">
+                        </div>
+
+                    </div>
+
+                `;
+
+                container.appendChild(item);
+
+            }
+        );
+
+        document.getElementById(
+            "breakdownTotal"
+        ).innerText =
+            totalScore + " / 100";
+    }
+
+     function showList(
+    elementId,
+    items
+) {
+
+    const element =
+        document.getElementById(
+            elementId
+        );
+
+    element.innerHTML =
+        "";
+
+    const isTagContainer =
+        element.classList.contains(
+            "tag-container"
+        );
+
+    if (!items || items.length === 0) {
+
+        if (isTagContainer) {
+
+            const tag =
+                document.createElement(
+                    "span"
+                );
+
+            tag.className =
+                "empty-tag";
+
+            tag.innerText =
+                "None";
+
+            element.appendChild(tag);
+
+        } else {
+
+            const li =
+                document.createElement(
+                    "li"
+                );
+
+            li.innerText =
+                "None";
+
+            element.appendChild(li);
+        }
+
+        return;
+    }
+
+    items.forEach(item => {
+
+        if (isTagContainer) {
+
+            const tag =
+                document.createElement(
+                    "span"
+                );
+
+            tag.className =
+                "skill-tag";
+
+            tag.innerText =
+                item;
+
+            element.appendChild(tag);
+
+        } else {
+
+            const li =
+                document.createElement(
+                    "li"
+                );
+
+            li.innerText =
+                item;
+
+            element.appendChild(li);
+        }
+
+    });
+
+}
+   async function loadResumeHistory() {
+        const historyBody =
+            document.getElementById(
+                "historyBody"
+            );
+
+        const noHistory =
+            document.getElementById(
+                "noHistory"
+            );
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/resume/all"
+                );
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load history"
+                );
+
+            }
+
+            const resumes =
+                await response.json();
+
+            historyBody.innerHTML =
+                "";
+
+            if (!resumes || resumes.length === 0) {
+
+                noHistory.style.display =
+                    "block";
+
+                return;
+            }
+
+            noHistory.style.display =
+                "none";
+
+            resumes.forEach((resume, index)  => {
+
+                const row =
+                    document.createElement("tr");
+
+                row.innerHTML = `
+
+                    <td>${index + 1}</td>
+                   <td>${resume.id}</td>
+
+                    <td>${escapeHtml(
+                        resume.fileName
+                    )}</td>
+
+                    <td class="score-badge">
+                        ${resume.atsScore} / 100
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            resume.selectedJobRole || "Not available"
+                        )}
+                    </td>
+
+                    <td>
+                        ${
+                            resume.jobMatchScore != null
+                                ? resume.jobMatchScore + "%"
+                                : "Not available"
+                        }
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="view-btn"
+                            onclick="viewResume(${resume.id})">
+                            View Details
+                        </button>
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteResume(${resume.id})">
+                            Delete
+                        </button>
+
+                    </td>
+
+                `;
+
+                historyBody.appendChild(row);
+
+            });
+
+        } catch (error) {
+
+            console.error(error);
+
+            historyBody.innerHTML = "";
+
+            noHistory.style.display =
+                "block";
+
+            noHistory.innerText =
+                "Unable to load resume history.";
+
+        }
+
+    }
+
+    async function viewResume(id) {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/resume/" + id
+                );
+
+            const data =
+                await response.json();
+
+            if (!response.ok) {
+
+                alert(
+                    data.message ||
+                    "Resume not found."
+                );
+
+                return;
+            }
+
+            document.getElementById(
+                "detailFileName"
+            ).innerText =
+                data.fileName;
+
+            document.getElementById(
+                "detailScore"
+            ).innerText =
+                data.atsScore + " / 100";
+
+            document.getElementById(
+                "detailJobRole"
+            ).innerText =
+                data.selectedJobRole || "Not available";
+
+            document.getElementById(
+                "detailJobMatchScore"
+            ).innerText =
+                data.jobMatchScore != null
+                    ? data.jobMatchScore + "%"
+                    : "Not available";
+
+            showList(
+                "detailSkills",
+                convertStringToArray(
+                    data.skills
+                )
+            );
+
+            showList(
+                "detailJobs",
+                convertStringToArray(
+                    data.recommendedJobs
+                )
+            );
+
+          showList(
+    "detailMissingSkills",
+    data.missingJobSkills
+);
+
+            showList(
+                "detailStrengths",
+                convertStringToArray(
+                    data.strengths
+                )
+            );
+
+            showList(
+                "detailSuggestions",
+                convertStringToArray(
+                    data.suggestions
+                )
+            );
+
+            document.getElementById(
+                "detailsModal"
+            ).style.display =
+                "block";
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Unable to load resume details."
+            );
+
+        }
+
+    }
+
+    function convertStringToArray(value) {
+
+        if (!value || value.trim() === "") {
+
+            return [];
+
+        }
+
+        return value
+            .split(",")
+            .map(item => item.trim())
+            .filter(item => item.length > 0);
+
+    }
+
+    async function deleteResume(id) {
+
+        const confirmDelete =
+            confirm(
+                "Are you sure you want to delete this resume?"
+            );
+
+        if (!confirmDelete) {
+
+            return;
+
+        }
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/resume/" + id,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            if (!response.ok) {
+
+                alert(
+                    data.message ||
+                    "Unable to delete resume."
+                );
+
+                return;
+            }
+
+            alert(
+                "Resume deleted successfully."
+            );
+
+            loadResumeHistory();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Unable to delete resume."
+            );
+
+        }
+
+    }
+
+    function closeModal() {
+
+        document.getElementById(
+            "detailsModal"
+        ).style.display =
+            "none";
+
+    }
+
+    window.onclick =
+        function(event) {
+
+            const modal =
+                document.getElementById(
+                    "detailsModal"
+                );
+
+            if (event.target === modal) {
+
+                modal.style.display =
+                    "none";
+
+            }
+
+        };
+
+    function escapeHtml(value) {
+
+        if (!value) {
+
+            return "";
+
+        }
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            loadJobRoles();
+            loadResumeHistory();
+
+        }
+    );
+
+    document.getElementById("fileInput").addEventListener("change", function () {
+
+    const fileName =
+        document.getElementById("fileName");
+
+    if (this.files.length > 0) {
+
+        fileName.textContent =
+            this.files[0].name;
+
+    } else {
+
+        fileName.textContent =
+            "No file chosen";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
