@@ -82,14 +82,14 @@ The application currently supports the following target roles:
 The ATS score is calculated using multiple resume components:
 
 | Component           | Maximum Score |
-| ------------------- | ------------- |
-| Technical Skills    | 40            |
-| Resume Sections     | 20            |
-| Projects            | 15            |
-| Education           | 10            |
-| Contact Information | 5             |
-| Achievements        | 10            |
-| **Total**           | **100**       |
+| ------------------- | ------------: |
+| Technical Skills    |            40 |
+| Resume Sections     |            20 |
+| Projects            |            15 |
+| Education           |            10 |
+| Contact Information |             5 |
+| Achievements        |            10 |
+| **Total**           |       **100** |
 
 ## 🎯 Job Match Analysis
 
@@ -129,17 +129,27 @@ ResumeAnalyzer
 │   │   ├── java
 │   │   │   └── com.resumeanalyzer.resumeanalyzer
 │   │   │       ├── controller
+│   │   │       ├── JobMatchService.java
+│   │   │       ├── JobRecommendationService.java
+│   │   │       ├── JobRoleService.java
+│   │   │       ├── ResumeAnalyzer.java
+│   │   │       ├── ResumeAnalyzerApplication.java
+│   │   │       ├── ResumeQualityService.java
+│   │   │       ├── ResumeScoreService.java
+│   │   │       ├── ResumeTextExtractor.java
 │   │   │       └── repository
+│   │   │           ├── ResumeRepository.java
 │   │   │           └── entity
+│   │   │               └── Resume.java
 │   │   │
 │   │   └── resources
 │   │       ├── static
 │   │       ├── templates
+│   │       │   └── index.html
 │   │       └── application.properties
 │   │
 │   └── test
 │
-├── uploads
 ├── .gitignore
 ├── .gitattributes
 ├── mvnw
@@ -235,11 +245,11 @@ The primary resume upload endpoint is:
 POST /api/resume/upload
 ```
 
-Additional endpoints and their exact behavior will be documented after final API testing.
+Additional endpoints can be documented separately as the project API documentation is expanded.
 
 ## 🧪 Testing
 
-The final version of the project will be tested for:
+The application has been tested for:
 
 * Application startup
 * MySQL database connection
@@ -253,12 +263,11 @@ The final version of the project will be tested for:
 * Resume history
 * View details
 * Delete functionality
-
-Final test results will be added after the complete testing phase.
+* Data persistence after page refresh
 
 ## 📸 Screenshots
 
-Screenshots of the final working application will be added here after final UI testing.
+Screenshots of the final working application will be added here.
 
 Planned screenshots include:
 
