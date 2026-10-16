@@ -38,7 +38,9 @@ The system extracts text from uploaded PDF resumes, calculates an ATS-style comp
 
 ## Project Documentation
 
-For detailed information about the project architecture, implementation, features, workflow, and technical details, see [`documentation.md`](documentation.md).
+## Project Documentation
+
+For detailed information about the project architecture, implementation, features, workflow, and technical details, see [`PROJECT_DOCUMENTATION.md`](PROJECT_DOCUMENTATION.md).
 
 ## Author
 
