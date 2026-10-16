@@ -1,61 +1,48 @@
 ﻿# Resume Analyzer & Job Recommendation System
 
-A web-based Resume Analyzer that evaluates resumes, calculates an ATS compatibility score, identifies technical skills, recommends suitable job roles, and provides improvement suggestions based on the selected target role.
+## Project Overview
 
-### Main Analysis Result
+Resume Analyzer is a web-based application developed using Java and Spring Boot that helps users evaluate their resumes and identify suitable job opportunities based on their skills.
 
-![Main Analysis Result](screenshots/main-analysis-result.png)
+The system extracts text from uploaded PDF resumes, calculates an ATS-style compatibility score, identifies technical skills, matches resumes with selected job roles, and provides personalized improvement suggestions.
 
-The main analysis screen displays the ATS compatibility score, Job Match Analysis, ATS score breakdown, detected skills, recommended jobs, missing skills, strengths, and improvement suggestions.
+## Key Features
 
-### View Analysis Details
+- **Resume Upload & PDF Processing:** Upload PDF resumes and extract their text for analysis.
+- **ATS Score Analysis:** Calculate a resume compatibility score using predefined evaluation rules.
+- **Skill Detection:** Identify technical skills mentioned in the resume.
+- **Job Role Matching:** Compare detected skills with the requirements of the selected job role.
+- **Missing Skills Analysis:** Highlight skills that may be needed for the target role.
+- **Job Recommendations:** Suggest suitable job roles based on the detected skills.
+- **Improvement Suggestions:** Help users identify areas where their resumes can be improved.
+- **Analysis History:** Store and view previous resume analysis records using MySQL.
 
-![View Analysis Details](screenshots/view-details.png)
+## Technology Stack
 
-The View Details section displays the analyzed resume file, ATS score, selected target job role, Job Match Score, and detected skills.
+- **Backend:** Java, Spring Boot
+- **Frontend:** HTML, CSS, Thymeleaf
+- **Database:** MySQL
+- **PDF Processing:** Apache PDFBox
+- **Build Tool:** Maven
+- **Version Control:** Git and GitHub
 
-## âš ï¸ Current Limitations
+## How It Works
 
-* Resume analysis is currently rule-based.
-* Skill detection is based on predefined technical skills.
-* Job-role requirements are predefined.
-* The current system does not use a machine-learning model.
-* Resume analysis is mainly focused on text-based PDF resumes.
+1. The user uploads a PDF resume and selects a target job role.
+2. The application extracts text from the resume.
+3. Predefined rules identify technical skills and evaluate resume content.
+4. The system calculates the ATS-style score and job match score.
+5. The results include detected skills, missing skills, recommended roles, and improvement suggestions.
+6. Analysis records are stored in MySQL for history tracking.
 
-## ðŸš€ Future Enhancements
 
-Possible future improvements include:
+## Project Documentation
 
-* AI/ML-based resume analysis
-* Natural Language Processing
-* More job roles and skill sets
-* Improved skill extraction
-* Resume keyword optimization
-* Job description matching
-* Personalized job recommendations
-* Resume section quality analysis
-* Authentication and user accounts
-* Cloud deployment
-* More advanced ATS analysis
+For detailed information about the project architecture, implementation, features, workflow, and technical details, see [`documentation.md`](documentation.md).
 
-## ðŸŽ“ Project Purpose
-
-This project was developed as an academic and practical software development project to understand:
-
-* Java and Spring Boot
-* REST APIs
-* Database integration
-* PDF processing
-* Frontend-backend integration
-* Resume analysis logic
-* Job matching
-* Git and GitHub project management
-
-## ðŸ‘©â€ðŸ’» Author
+## Author
 
 **Sakshi Singh**
 
-MCA Student | Software Developer
-
-
+MCA Student | Aspiring Software Developer
 
